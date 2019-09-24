@@ -19,12 +19,45 @@ const path = require('path');
 const chalk = require('chalk');
 const spawn = require('react-dev-utils/crossSpawn');
 
+function customLayout(appPath, layout) {
+  for (const key in layout) {
+    const value = layout[key];
+    const file = path.join(appPath, key);
+    try {
+      fs.renameSync(file, path.join(appPath, value));
+    } catch (e) {
+      console.error(`${file} is not exists`);
+    }
+  }
+  format(appPath, params);
+}
+
+function format(filePath, params) {
+  const stat = fs.statSync(filePath);
+  if (stat.isDirectory()) {
+    return fs
+      .readdirSync(filePath, { withFileTypes: true })
+      .filter(item => ['node_modules', '.git'].indexOf(item.name) == -1)
+      .forEach(item => format(path.join(filePath, item.name), params));
+  }
+  const buffer = fs.readFileSync(filePath);
+  let changed = false;
+  const content = buffer.toString().replace(/\{\{(\w+)\}\}/, function(m, w) {
+    changed = true;
+    return params.hasOwnProperty(w) ? params[w] : w;
+  });
+  if (changed) {
+    fs.writeFileSync(filePath, content);
+  }
+}
+
 module.exports = function(
   appPath,
   appName,
   verbose,
   originalDirectory,
-  template
+  template,
+  layout
 ) {
   const ownPackageName = require(path.join(__dirname, '..', 'package.json'))
     .name;
@@ -83,6 +116,8 @@ module.exports = function(
     const modules = fs.readFileSync(modulesPath, 'utf8');
     fs.writeFileSync(modulesPath, modules.replace(/%appName%/g, appName));
   }
+
+  customLayout(appPath, layout);
 
   // Rename gitignore after the fact to prevent npm from renaming it to .npmignore
   // See: https://github.com/npm/npm/issues/1862
