@@ -29,7 +29,7 @@ function customLayout(appPath, layout) {
       console.error(`${file} is not exists`);
     }
   }
-  format(appPath, params);
+  format(appPath, layout);
 }
 
 function format(filePath, params) {
