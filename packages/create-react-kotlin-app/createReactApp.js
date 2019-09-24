@@ -58,7 +58,7 @@ function collectLayout(value, layout) {
 }
 
 function updateLayout(layout, config) {
-  const items = config.split(':');
+  const items = config.split('=');
   if (items.length == 2) {
     layout[items[0]] = items[1];
   } else {
