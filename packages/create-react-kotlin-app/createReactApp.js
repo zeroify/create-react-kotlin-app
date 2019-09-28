@@ -177,6 +177,9 @@ function createApp(name, verbose, version, template) {
     name: appName,
     version: '0.1.0',
     private: true,
+    kotlin: {
+      src: program.layout.src || 'src',
+    },
   };
   fs.writeFileSync(
     path.join(root, 'package.json'),
