@@ -14,3 +14,4 @@ npm-debug.log*
 template/src/__tests__/__snapshots__/
 yarn-debug.log*
 yarn-error.log*
+test

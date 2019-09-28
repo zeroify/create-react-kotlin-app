@@ -39,6 +39,10 @@ if (env.stringified['process.env'].NODE_ENV !== '"production"') {
 }
 
 const kotlinModuleName = 'kotlinApp';
+const sourcePaths = {};
+[]
+  .concat(paths.appSrc)
+  .forEach(source => (sourcePaths[path.basename(source)] = source));
 
 // This is the production configuration.
 // It compiles slowly and is focused on producing a fast and minimal bundle.
@@ -83,12 +87,14 @@ module.exports = {
     // some tools, although we do not recommend using it, see:
     // https://github.com/facebookincubator/create-react-app/issues/290
     extensions: ['.js', '.json', '.jsx'],
-    alias: {
-      // Support React Native Web
-      // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      'react-native': 'react-native-web',
-      src: paths.appSrc,
-    },
+    alias: Object.assign(
+      {
+        // Support React Native Web
+        // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+        'react-native': 'react-native-web',
+      },
+      sourcePaths
+    ),
   },
   module: {
     strictExportPresence: true,

@@ -42,7 +42,7 @@ function format(filePath, params) {
   }
   const buffer = fs.readFileSync(filePath);
   let changed = false;
-  const content = buffer.toString().replace(/\{\{(\w+)\}\}/, function(m, w) {
+  const content = buffer.toString().replace(/\{\{(\w+)\}\}/g, function(m, w) {
     changed = true;
     return params.hasOwnProperty(w) ? params[w] : w;
   });
