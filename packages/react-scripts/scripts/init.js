@@ -75,7 +75,10 @@ module.exports = function(
     build: 'react-scripts-kotlin build',
     eject: 'react-scripts-kotlin eject',
     'gen-idea-libs': 'react-scripts-kotlin gen-idea-libs',
-    'get-types': 'react-scripts-kotlin get-types --dest=src/types',
+    'get-types':
+      'react-scripts-kotlin get-types --dest=' +
+      [].concat(layout.src)[0] +
+      '/types',
     postinstall: 'npm run gen-idea-libs',
   };
 
